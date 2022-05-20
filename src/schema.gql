@@ -12,23 +12,47 @@ type User {
 type Todo {
   id: ID!
   text: String!
-  createdAt: String!
   status: String!
+  createdAt: String!
+  user: User!
+}
+
+type LoginResponse {
+  access_token: String!
   user: User!
 }
 
 type Query {
   getAllTodos: [Todo!]!
   getTodo(id: Int!): Todo!
+  getUser(username: String!): User!
 }
 
 type Mutation {
+  createTodo(createTodoInput: CreateTodoInput!): Todo!
   updateTodo(updateTodoInput: UpdateTodoInput!): Todo!
   deleteTodo(id: Int!): Int!
+  createUser(createUserInput: CreateUserInput!): User!
+  signin(loginUserInput: LoginUserInput!): LoginResponse!
+}
+
+input CreateTodoInput {
+  text: String!
+  user: String!
 }
 
 input UpdateTodoInput {
   id: ID!
   text: String
   status: String!
+}
+
+input CreateUserInput {
+  username: String!
+  password: String!
+}
+
+input LoginUserInput {
+  username: String!
+  password: String!
 }

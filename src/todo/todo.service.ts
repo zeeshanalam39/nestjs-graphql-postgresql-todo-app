@@ -16,17 +16,17 @@ export class TodoService {
     return this.todoRepository.find();
   }
 
-  // async createTodo(createTodoInput: CreateTodoInput): Promise<Todo> {
-  //   const { text, user } = createTodoInput;
-  //   const newTodo = this.todoRepository.create({
-  //     text,
-  //     user,
-  //     createdAt: new Date().toISOString(),
-  //     status: TodoStatus.PENDING,
-  //   });
-  //   await this.todoRepository.save(newTodo);
-  //   return newTodo;
-  // }
+  async createTodo(createTodoInput: CreateTodoInput): Promise<Todo> {
+    const { text, user } = createTodoInput;
+    const newTodo = this.todoRepository.create({
+      text,
+      status: TodoStatus.PENDING,
+      createdAt: new Date().toISOString(),
+      // user,
+    });
+    await this.todoRepository.save(newTodo);
+    return newTodo;
+  }
 
   async getTodo(id): Promise<Todo> {
     const todoFound = await this.todoRepository.findOne({ where: { id } });

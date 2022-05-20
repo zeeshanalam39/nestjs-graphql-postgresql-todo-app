@@ -9,5 +9,5 @@ export class CreateTodoInput {
 
   @Field()
   @Length(3, 50)
-  user: string;
+  user: string; // Todo - Remove this. Get user from current signed in....
 }

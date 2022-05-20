@@ -16,11 +16,11 @@ export class Todo {
 
   @Column()
   @Field()
-  createdAt: string;
+  status: TodoStatus;
 
   @Column()
   @Field()
-  status: TodoStatus;
+  createdAt: string;
 
   @ManyToOne(() => User, (user) => user.todos)
   @Field((type) => User)

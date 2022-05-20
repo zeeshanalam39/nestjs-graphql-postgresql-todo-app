@@ -15,7 +15,7 @@ export class User {
 
   @Column()
   @Field()
-  password: string;
+  password: string; // Todo - Remove to avoid exposure to user.
 
   @OneToMany(() => Todo, (todo) => todo.user)
   @Field((type) => [Todo])

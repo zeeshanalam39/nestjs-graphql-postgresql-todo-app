@@ -18,12 +18,12 @@ export class TodoResolver {
     return this.todoService.getTodo(id);
   }
 
-  // @Mutation((returns) => Todo)
-  // async createTodo(
-  //   @Args('createTodoInput') createTodoInput: CreateTodoInput,
-  // ): Promise<Todo> {
-  //   return this.todoService.createTodo(createTodoInput);
-  // }
+  @Mutation((returns) => Todo)
+  async createTodo(
+    @Args('createTodoInput') createTodoInput: CreateTodoInput,
+  ): Promise<Todo> {
+    return this.todoService.createTodo(createTodoInput);
+  }
 
   @Mutation((returns) => Todo)
   async updateTodo(
