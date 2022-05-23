@@ -4,35 +4,35 @@ import { UpdateTodoInput } from './dto/update-todo.input';
 import { Todo } from './todo.entity';
 import { TodoService } from './todo.service';
 
-@Resolver((of) => Todo)
+@Resolver(() => Todo)
 export class TodoResolver {
   constructor(private todoService: TodoService) {}
 
-  @Query((returns) => [Todo])
+  @Query(() => [Todo])
   async getAllTodos(): Promise<Todo[]> {
     return this.todoService.getAllTodos();
   }
 
-  @Query((returns) => Todo)
+  @Query(() => Todo)
   async getTodo(@Args('id', { type: () => Int }) id: number): Promise<Todo> {
     return this.todoService.getTodo(id);
   }
 
-  @Mutation((returns) => Todo)
+  @Mutation(() => Todo)
   async createTodo(
     @Args('createTodoInput') createTodoInput: CreateTodoInput,
   ): Promise<Todo> {
     return this.todoService.createTodo(createTodoInput);
   }
 
-  @Mutation((returns) => Todo)
+  @Mutation(() => Todo)
   async updateTodo(
     @Args('updateTodoInput') updateTodoInput: UpdateTodoInput,
   ): Promise<Todo> {
     return this.todoService.updateTodoStatus(updateTodoInput);
   }
 
-  @Mutation((returns) => Int)
+  @Mutation(() => Int)
   async deleteTodo(
     @Args('id', { type: () => Int }) id: number,
   ): Promise<number> {

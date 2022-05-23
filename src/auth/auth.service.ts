@@ -1,24 +1,44 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
-import { LoginUserInput } from './dto/login-user.input';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
+import { SigninUserInput } from './dto/signin-user.input';
+import { SigninResponse } from './dto/signin-response';
+import { SignupResponse } from './dto/signup-response';
 
 @Injectable()
 export class AuthService {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private jwtService: JwtService,
+  ) {}
 
-  async validateUser(username: string, password: string): Promise<any> {
-    const user = this.usersService.getUser(username);
-    if (user && (await user).password === password) {
-      return user; // Todo - Remove password.
-    }
-    throw new UnauthorizedException();
+  async signup(loginUserInput: SigninUserInput): Promise<SignupResponse> {
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(loginUserInput.password, salt);
+    loginUserInput.password = hashedPassword;
+
+    return this.usersService.createUser(loginUserInput);
   }
 
-  async login(loginUserInput: LoginUserInput): Promise<any> {
-    const user = this.usersService.getUser(loginUserInput.username);
+  async signin(user: User): Promise<SigninResponse> {
+    const username = user.username;
+    const access_token = await this.jwtService.sign({
+      username,
+      sub: user.id,
+    });
     return {
-      access_token: 'jwt',
-      user,
+      access_token,
+      username,
     };
+  }
+
+  async validateUser(username: string, password: string): Promise<User> {
+    const user = await this.usersService.getUser(username);
+    if (user && (await bcrypt.compare(password, user.password))) {
+      return user;
+    }
+    throw new UnauthorizedException();
   }
 }

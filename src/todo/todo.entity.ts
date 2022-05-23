@@ -7,7 +7,7 @@ import { TodoStatus } from './todo-status.enum';
 @ObjectType()
 export class Todo {
   @PrimaryGeneratedColumn('uuid')
-  @Field((type) => ID)
+  @Field(() => ID)
   id: string;
 
   @Column()
@@ -22,7 +22,7 @@ export class Todo {
   @Field()
   createdAt: string;
 
-  @ManyToOne(() => User, (user) => user.todos)
-  @Field((type) => User)
+  @ManyToOne(() => User, (user) => user.todos, { eager: false })
+  @Field(() => User)
   user: User;
 }

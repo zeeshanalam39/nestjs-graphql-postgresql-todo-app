@@ -1,5 +1,6 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CreateUserInput } from './dto/create-user.input';
+import { UseGuards } from '@nestjs/common';
+import { Args, Query, Resolver } from '@nestjs/graphql';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
 
@@ -7,18 +8,16 @@ import { UsersService } from './users.service';
 export class UsersResolver {
   constructor(private usersService: UsersService) {}
 
-  // Todo - Do not return user object containing password. Serilization etc.
-  @Mutation((returns) => User)
-  async createUser(
-    @Args('createUserInput') createUserInput: CreateUserInput,
-  ): Promise<User> {
-    return this.usersService.createUser(createUserInput);
-  }
-
-  @Query((returns) => User)
+  @Query(() => User)
   async getUser(
     @Args('username', { type: () => String }) username: string,
   ): Promise<User> {
     return this.usersService.getUser(username);
+  }
+
+  @Query(() => [User])
+  @UseGuards(JwtAuthGuard) // Todo - Not Working
+  async getAllUsers(): Promise<User[]> {
+    return this.usersService.getAllUsers();
   }
 }

@@ -6,7 +6,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 @ObjectType()
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  @Field((type) => ID)
+  @Field(() => ID)
   id: string;
 
   @Column({ unique: true })
@@ -17,7 +17,7 @@ export class User {
   @Field()
   password: string; // Todo - Remove to avoid exposure to user.
 
-  @OneToMany(() => Todo, (todo) => todo.user)
-  @Field((type) => [Todo])
+  @OneToMany(() => Todo, (todo) => todo.user, { eager: true })
+  @Field(() => [Todo])
   todos: Todo[];
 }

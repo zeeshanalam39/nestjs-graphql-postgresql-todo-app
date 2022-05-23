@@ -3,10 +3,21 @@ import { AuthService } from './auth.service';
 import { AuthResolver } from './auth.resolver';
 import { UsersModule } from 'src/users/users.module';
 import { PassportModule } from '@nestjs/passport';
-import { LocalStrategy } from './local.strategy';
+import { JwtModule } from '@nestjs/jwt';
+import { LocalStrategy } from './strategy/local.strategy';
+import { JwtStrategy } from './strategy/jwt.strategy';
 
 @Module({
-  imports: [UsersModule, PassportModule],
-  providers: [AuthService, AuthResolver, LocalStrategy],
+  imports: [
+    UsersModule,
+    PassportModule,
+    JwtModule.register({
+      signOptions: {
+        expiresIn: '3600',
+      },
+      secret: `Todo - Protect Me`, // Todo - Protect Me
+    }),
+  ],
+  providers: [AuthService, AuthResolver, LocalStrategy, JwtStrategy],
 })
 export class AuthModule {}
