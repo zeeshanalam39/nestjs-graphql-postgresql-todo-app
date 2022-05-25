@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       driver: ApolloDriver,
+      context: ({ req }) => ({ req }),
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -22,7 +23,8 @@ import { AuthModule } from './auth/auth.module';
       database: 'todo-db',
       autoLoadEntities: true,
       synchronize: true,
-      entities: ['dist/**/*.entity{.ts,.js}'],
+      // entities: ['dist/**/*.entity{.ts,.js}'],
+      entities: ['dist/entities/*.js'], // Todo - Why
     }),
     TodoModule,
     UsersModule,

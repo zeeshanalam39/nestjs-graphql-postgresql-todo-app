@@ -28,7 +28,7 @@ type SignupResponse {
 
 type Query {
   getAllTodos: [Todo!]!
-  getTodo(id: Int!): Todo!
+  getTodo(id: String!): Todo!
   getUser(username: String!): User!
   getAllUsers: [User!]!
 }
@@ -36,14 +36,13 @@ type Query {
 type Mutation {
   createTodo(createTodoInput: CreateTodoInput!): Todo!
   updateTodo(updateTodoInput: UpdateTodoInput!): Todo!
-  deleteTodo(id: Int!): Int!
+  deleteTodo(id: String!): Todo!
   signup(loginUserInput: SigninUserInput!): SignupResponse!
   signin(loginUserInput: SigninUserInput!): SigninResponse!
 }
 
 input CreateTodoInput {
   text: String!
-  user: String!
 }
 
 input UpdateTodoInput {

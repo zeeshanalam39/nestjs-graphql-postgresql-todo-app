@@ -1,41 +1,54 @@
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { CurrentUser } from 'src/auth/get-current-user.decorator';
 import { CreateTodoInput } from './dto/create-todo.input';
 import { UpdateTodoInput } from './dto/update-todo.input';
 import { Todo } from './todo.entity';
 import { TodoService } from './todo.service';
+import { User } from 'src/users/user.entity';
 
 @Resolver(() => Todo)
 export class TodoResolver {
   constructor(private todoService: TodoService) {}
 
   @Query(() => [Todo])
-  async getAllTodos(): Promise<Todo[]> {
-    return this.todoService.getAllTodos();
+  @UseGuards(JwtAuthGuard)
+  async getAllTodos(@CurrentUser() user: User): Promise<Todo[]> {
+    return this.todoService.getAllTodos(user);
   }
 
   @Query(() => Todo)
-  async getTodo(@Args('id', { type: () => Int }) id: number): Promise<Todo> {
-    return this.todoService.getTodo(id);
+  @UseGuards(JwtAuthGuard)
+  async getTodo(
+    @Args('id', { type: () => String }) id: string,
+    @CurrentUser() user: User,
+  ): Promise<Todo> {
+    return this.todoService.getTodo(id, user);
   }
 
   @Mutation(() => Todo)
+  @UseGuards(JwtAuthGuard)
   async createTodo(
     @Args('createTodoInput') createTodoInput: CreateTodoInput,
+    @CurrentUser() user: any,
   ): Promise<Todo> {
-    return this.todoService.createTodo(createTodoInput);
+    return this.todoService.createTodo(createTodoInput, user);
   }
 
   @Mutation(() => Todo)
   async updateTodo(
+    @CurrentUser() user: User,
     @Args('updateTodoInput') updateTodoInput: UpdateTodoInput,
   ): Promise<Todo> {
-    return this.todoService.updateTodoStatus(updateTodoInput);
+    return this.todoService.updateTodoStatus(updateTodoInput, user);
   }
 
-  @Mutation(() => Int)
+  @Mutation(() => Todo)
   async deleteTodo(
-    @Args('id', { type: () => Int }) id: number,
-  ): Promise<number> {
-    return this.todoService.deleteTodo(id);
+    @Args('id', { type: () => String }) id: string,
+    @CurrentUser() user: User,
+  ): Promise<Todo> {
+    return this.todoService.deleteTodo(id, user);
   }
 }

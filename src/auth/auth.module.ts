@@ -13,7 +13,7 @@ import { JwtStrategy } from './strategy/jwt.strategy';
     PassportModule,
     JwtModule.register({
       signOptions: {
-        expiresIn: '3600',
+        expiresIn: '10h',
       },
       secret: `Todo - Protect Me`, // Todo - Protect Me
     }),

@@ -3,7 +3,7 @@ import { Todo } from 'src/todo/todo.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-@ObjectType()
+@ObjectType('User')
 export class User {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => ID)

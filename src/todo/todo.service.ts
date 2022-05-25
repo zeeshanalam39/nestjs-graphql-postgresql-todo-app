@@ -5,6 +5,7 @@ import { Todo } from './todo.entity';
 import { CreateTodoInput } from './dto/create-todo.input';
 import { UpdateTodoInput } from './dto/update-todo.input';
 import { TodoStatus } from './todo-status.enum';
+import { User } from 'src/users/user.entity';
 
 @Injectable()
 export class TodoService {
@@ -12,32 +13,39 @@ export class TodoService {
     @InjectRepository(Todo) private todoRepository: Repository<Todo>,
   ) {}
 
-  async getAllTodos(): Promise<Todo[]> {
-    return this.todoRepository.find();
+  async getAllTodos(user): Promise<Todo[]> {
+    return this.todoRepository.find({ where: { user } });
   }
 
-  async createTodo(createTodoInput: CreateTodoInput): Promise<Todo> {
-    const { text, user } = createTodoInput;
-    const newTodo = this.todoRepository.create({
-      text,
-      status: TodoStatus.PENDING,
-      createdAt: new Date().toISOString(),
-      // user,
+  async getTodo(id: string, user: User): Promise<Todo> {
+    const todoFound = await this.todoRepository.findOne({
+      where: { id, user },
     });
-    await this.todoRepository.save(newTodo);
-    return newTodo;
-  }
-
-  async getTodo(id): Promise<Todo> {
-    const todoFound = await this.todoRepository.findOne({ where: { id } });
     if (!todoFound) {
       throw new NotFoundException(`Todo with id ${id} not found.`);
     }
     return todoFound;
   }
 
-  async updateTodoStatus(updateTodoInput: UpdateTodoInput): Promise<Todo> {
-    const todo = await this.getTodo(updateTodoInput.id);
+  async createTodo(createTodoInput: CreateTodoInput, user: any): Promise<Todo> {
+    const { text } = createTodoInput;
+
+    const newTodo = this.todoRepository.create({
+      text,
+      status: TodoStatus.PENDING,
+      createdAt: new Date().toISOString(),
+      user,
+    });
+
+    await this.todoRepository.save(newTodo);
+    return newTodo;
+  }
+
+  async updateTodoStatus(
+    updateTodoInput: UpdateTodoInput,
+    user: User,
+  ): Promise<Todo> {
+    const todo = await this.getTodo(updateTodoInput.id, user);
     const { text, status } = updateTodoInput;
     if (text) {
       todo.text = text;
@@ -49,11 +57,16 @@ export class TodoService {
     return todo;
   }
 
-  async deleteTodo(id): Promise<number> {
-    const result = await this.todoRepository.delete({ id });
-    if (result.affected === 0) {
-      throw new NotFoundException(`Todo with id ${id} not found.`);
-    }
-    return id;
+  async deleteTodo(id: string, user: User): Promise<Todo> {
+    const todoFound: Todo = await this.getTodo(id, user);
+    const removedTodoId = todoFound.id;
+    const result: Todo = await this.todoRepository.remove(todoFound);
+    result.id = removedTodoId;
+    return result;
+    //   const result = await this.todoRepository.delete({ id, user });
+    //   if (result.affected === 0) {
+    //     throw new NotFoundException(`Todo with id ${id} not found.`);
+    //   }
+    //   return id;
   }
 }

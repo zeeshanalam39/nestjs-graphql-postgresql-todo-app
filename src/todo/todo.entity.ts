@@ -4,7 +4,7 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { TodoStatus } from './todo-status.enum';
 
 @Entity()
-@ObjectType()
+@ObjectType('Todo')
 export class Todo {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => ID)
