@@ -11,7 +11,7 @@ export class User {
 
   @Column({ unique: true })
   @Field()
-  username: string;
+  username: string; // Todo - Validations on username/pass
 
   @Column()
   @Field()
