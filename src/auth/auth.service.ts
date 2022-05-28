@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from 'src/users/users.service';
@@ -28,6 +32,9 @@ export class AuthService {
       username,
       sub: user.id,
     });
+    if (!access_token) {
+      throw new InternalServerErrorException();
+    }
     return {
       access_token,
       username,

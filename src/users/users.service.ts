@@ -25,7 +25,7 @@ export class UsersService {
       return { username };
     } catch (error) {
       if (error.code === '23505') {
-        throw new ConflictException('Username already exists');
+        throw new ConflictException('Username already exists.');
       } else {
         throw new InternalServerErrorException();
       }
