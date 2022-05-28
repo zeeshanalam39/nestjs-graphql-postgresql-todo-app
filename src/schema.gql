@@ -26,11 +26,6 @@ type SignupResponse {
   username: String!
 }
 
-type UserChangedResponse {
-  username: String!
-  message: String!
-}
-
 type Query {
   getAllTodos: [Todo!]!
   getTodo(id: String!): Todo!
@@ -42,8 +37,6 @@ type Mutation {
   deleteTodo(id: String!): Todo!
   signup(loginUserInput: SigninUserInput!): SignupResponse!
   signin(loginUserInput: SigninUserInput!): SigninResponse!
-  changeUsername(changeUsernameInput: ChangeUsernameInput!): UserChangedResponse!
-  changePassword: User!
 }
 
 input CreateTodoInput {
@@ -59,8 +52,4 @@ input UpdateTodoInput {
 input SigninUserInput {
   username: String!
   password: String!
-}
-
-input ChangeUsernameInput {
-  username: String!
 }

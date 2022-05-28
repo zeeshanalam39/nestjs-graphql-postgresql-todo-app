@@ -10,7 +10,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: `Todo - Protect Me`, // Todo - Protect Me,
+      secretOrKey: `Todo - Protect Me`,
     });
   }
 
@@ -23,6 +23,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException();
     }
 
-    return user; // Todo - Why this was not working with just userId & username.
+    return user;
   }
 }

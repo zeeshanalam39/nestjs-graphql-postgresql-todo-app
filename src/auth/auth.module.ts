@@ -15,7 +15,7 @@ import { JwtStrategy } from './strategy/jwt.strategy';
       signOptions: {
         expiresIn: '10h',
       },
-      secret: `Todo - Protect Me`, // Todo - Protect Me
+      secret: `Todo - Protect Me`,
     }),
   ],
   providers: [AuthService, AuthResolver, LocalStrategy, JwtStrategy],

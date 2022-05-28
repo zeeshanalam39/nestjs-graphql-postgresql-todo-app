@@ -11,11 +11,11 @@ export class User {
 
   @Column({ unique: true })
   @Field()
-  username: string; // Todo - Validations on username/pass
+  username: string;
 
   @Column()
   @Field()
-  password: string; // Todo - Remove to avoid exposure to user.
+  password: string;
 
   @OneToMany(() => Todo, (todo) => todo.user, { eager: true })
   @Field(() => [Todo])

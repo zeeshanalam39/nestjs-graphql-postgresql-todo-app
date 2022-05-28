@@ -9,7 +9,6 @@ import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { SignupResponse } from 'src/auth/dto/signup-response';
 import { SigninUserInput } from 'src/auth/dto/signin-user.input';
-import { UserChangedResponse } from './dto/user-changed.response';
 
 @Injectable()
 export class UsersService {
@@ -33,30 +32,6 @@ export class UsersService {
     }
   }
 
-  async changeUsername(
-    user: User,
-    newUsername: string,
-  ): Promise<UserChangedResponse> {
-    console.log('❌❌❌', user);
-
-    const userFound = await this.getUser(user.username);
-    const oldUsername = userFound.username;
-    userFound.username = newUsername;
-    try {
-      await this.usersRepository.save(userFound);
-      return {
-        username: newUsername,
-        message: `Your username has been changed to ${newUsername} from ${oldUsername}`,
-      };
-    } catch (error) {
-      throw new InternalServerErrorException();
-    }
-  }
-
-  async changePassword() {
-    return null;
-  }
-
   async getUser(username: string): Promise<User> {
     const user = await this.usersRepository.findOne({ where: { username } });
     if (!user) {
@@ -64,12 +39,4 @@ export class UsersService {
     }
     return user;
   }
-
-  // async getAllUsers(): Promise<User[]> {
-  //   const users = await this.usersRepository.find();
-  //   if (!users) {
-  //     throw new NotFoundException(`Users not found.`);
-  //   }
-  //   return users;
-  // }
 }

@@ -37,6 +37,7 @@ export class TodoResolver {
   }
 
   @Mutation(() => Todo)
+  @UseGuards(JwtAuthGuard)
   async updateTodo(
     @CurrentUser() user: User,
     @Args('updateTodoInput') updateTodoInput: UpdateTodoInput,
@@ -45,6 +46,7 @@ export class TodoResolver {
   }
 
   @Mutation(() => Todo)
+  @UseGuards(JwtAuthGuard)
   async deleteTodo(
     @Args('id', { type: () => String }) id: string,
     @CurrentUser() user: User,
