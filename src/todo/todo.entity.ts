@@ -22,7 +22,7 @@ export class Todo {
   @Field()
   createdAt: string;
 
-  @ManyToOne(() => User, (user) => user.todos, { eager: false })
+  @ManyToOne(() => User, (user) => user.todos)
   @Field(() => User)
   user: User;
 }

@@ -3,3 +3,6 @@ Sudo@1234
 
 hasheduser
 XYZxyz@123
+
+reader
+Reader@123

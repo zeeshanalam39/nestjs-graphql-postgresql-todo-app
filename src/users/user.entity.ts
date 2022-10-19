@@ -17,7 +17,7 @@ export class User {
   @Field()
   password: string;
 
-  @OneToMany(() => Todo, (todo) => todo.user, { eager: true })
+  @OneToMany(() => Todo, (todo) => todo.user)
   @Field(() => [Todo])
   todos: Todo[];
 }

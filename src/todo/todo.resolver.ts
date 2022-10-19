@@ -9,17 +9,18 @@ import { TodoService } from './todo.service';
 import { User } from 'src/users/user.entity';
 
 @Resolver(() => Todo)
+@UseGuards(JwtAuthGuard)
 export class TodoResolver {
   constructor(private todoService: TodoService) {}
 
   @Query(() => [Todo])
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   async getAllTodos(@CurrentUser() user: User): Promise<Todo[]> {
     return this.todoService.getAllTodos(user);
   }
 
   @Query(() => Todo)
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   async getTodo(
     @Args('id', { type: () => String }) id: string,
     @CurrentUser() user: User,
@@ -28,7 +29,7 @@ export class TodoResolver {
   }
 
   @Mutation(() => Todo)
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   async createTodo(
     @Args('createTodoInput') createTodoInput: CreateTodoInput,
     @CurrentUser() user: any,
@@ -37,7 +38,7 @@ export class TodoResolver {
   }
 
   @Mutation(() => Todo)
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   async updateTodo(
     @CurrentUser() user: User,
     @Args('updateTodoInput') updateTodoInput: UpdateTodoInput,
@@ -46,7 +47,7 @@ export class TodoResolver {
   }
 
   @Mutation(() => Todo)
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   async deleteTodo(
     @Args('id', { type: () => String }) id: string,
     @CurrentUser() user: User,
