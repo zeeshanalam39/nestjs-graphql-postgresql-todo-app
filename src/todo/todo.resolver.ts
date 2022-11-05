@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Info, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/auth/get-current-user.decorator';
 import { CreateTodoInput } from './dto/create-todo.input';
@@ -24,7 +24,14 @@ export class TodoResolver {
   async getTodo(
     @Args('id', { type: () => String }) id: string,
     @CurrentUser() user: User,
+    @Info() info,
   ): Promise<Todo> {
+    const keys = info.fieldNodes[0].selectionSet.selections.map(
+      (item) => item.name.value,
+    );
+    // console.log('❌: ', keys);
+    // console.log('❌: ', info.fieldNodes[0].selectionSet);
+
     return this.todoService.getTodo(id, user);
   }
 
